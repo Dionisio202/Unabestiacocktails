@@ -5,7 +5,6 @@ const AuthCtx = createContext(null);
 
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(null);
-  const [profile, setProfile] = useState(null); // opcional: para rol admin
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -17,13 +16,7 @@ export function AuthProvider({ children }) {
       setSession(session);
 
       if (session) {
-        // opcional: carga de perfil/rol
-        const { data } = await supabase
-          .from('profiles')
-          .select('id, is_admin')
-          .eq('id', session.user.id)
-          .single();
-        setProfile(data ?? null);
+  
       }
       setLoading(false);
     })();
@@ -40,7 +33,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthCtx.Provider value={{ user: session?.user ?? null, session, profile, loading }}>
+    <AuthCtx.Provider value={{ user: session?.user ?? null, session, loading }}>
       {children}
     </AuthCtx.Provider>
   );

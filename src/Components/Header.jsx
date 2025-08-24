@@ -24,19 +24,15 @@ export default function Header() {
               className="flex items-center gap-3 max-w-full"
             >
               {/* Logo con fondo propio */}
-              <span
-                className="shrink-0 p-[1px] rounded-xl bg-gradient-to-br from-amber-400 to-orange-600
-                           ring-1 ring-amber-300/50 shadow-[0_0_15px_rgba(251,191,36,0.25)]"
-              >
-                <span className="flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-[10px] bg-white">
+            
+                <span className="flex items-center justify-center h-12 w-auto sm:h-12 sm:w-auto ">
                   <img
                     src={bestia_cock}
                     alt="Grupo Una Bestia Cocktails - Logo"
-                    className="h-5 sm:h-7 w-auto object-contain"
+                    className="h-13 sm:h-18 w-auto object-contain"
                     draggable="false"
                   />
                 </span>
-              </span>
 
               <span className="truncate text-xl sm:text-2xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
                 Grupo Una Bestia Cocktails

@@ -56,7 +56,7 @@ export default function SponsorsSection() {
           <img
               src={move2}
               alt="UCB Masters of Cocktail"
-              className="h-50 sm:h-16 md:h-20 lg:h-24 w-auto drop-shadow-[0_6px_18px_rgba(251,191,36,0.25)]"
+              className="h-50 sm:h-16 md:h-20 lg:h-36 w-auto drop-shadow-[0_6px_18px_rgba(251,191,36,0.25)]"
               loading="eager"
               draggable="false"
             />

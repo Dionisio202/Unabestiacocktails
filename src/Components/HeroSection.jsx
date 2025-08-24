@@ -12,16 +12,11 @@ export default function HeroSection() {
          <img
           src={logo_comp}
           alt="UCB Masters of Cocktail - Logo"
-          className="mx-auto mb-6 h-16 sm:h-20 md:h-24 w-auto drop-shadow-[0_6px_18px_rgba(251,191,36,0.25)]"
+          className="mx-auto mb-6 h-42 sm:h-20 md:h-64 w-auto drop-shadow-[0_6px_18px_rgba(251,191,36,0.25)]"
           loading="eager"
           draggable="false"
         />
-        <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-amber-400 via-orange-500 to-amber-600 bg-clip-text text-transparent leading-tight">
-          UCB Masters <br /> of Cocktail
-        </h1>
-        <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-amber-300 mb-12">
-          Ambato 2025
-        </p>
+       
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-12 max-w-4xl mx-auto">
           <Card icon={<Calendar />} title="9 de Noviembre" text="2025" />

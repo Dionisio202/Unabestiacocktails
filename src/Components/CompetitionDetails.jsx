@@ -6,7 +6,7 @@ export default function CompetitionDetails() {
     <section id="competition" className="py-20 bg-gradient-to-b from-transparent to-black/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
       {/* Encabezado con imagen a la derecha */}
-<div className="mb-16 flex flex-col items-center gap-4 sm:flex-row justify-center">
+<div className="mb-16 flex flex-col items-center gap-8 sm:flex-row justify-center">
   <h2 className="text-4xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent text-center sm:text-left">
     Sobre la Competencia
   </h2>
@@ -14,7 +14,7 @@ export default function CompetitionDetails() {
   <img
     src={move}
     alt="UCB Masters of Cocktail"
-    className="h-50 sm:h-16 md:h-20 lg:h-24 w-auto drop-shadow-[0_6px_18px_rgba(251,191,36,0.25)]"
+    className="h-50 sm:h-16 md:h-20 lg:h-36 w-auto drop-shadow-[0_6px_18px_rgba(251,191,36,0.25)]"
     loading="eager"
     draggable="false"
   />
