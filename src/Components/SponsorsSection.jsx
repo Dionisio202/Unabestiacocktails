@@ -62,7 +62,7 @@ export default function SponsorsSection() {
             />
             </div>
           <p className="text-gray-300 max-w-3xl mx-auto">
-            Gracias a estas marcas por hacer posible UCB Masters of Cocktail 2025
+            Gracias a estas marcas por hacer posible UBC Masters of Cocktail 2025
           </p>
           <div className="mt-6 flex justify-center">
             <div className="w-24 h-1 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full" />

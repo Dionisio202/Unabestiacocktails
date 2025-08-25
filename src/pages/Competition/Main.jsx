@@ -19,7 +19,7 @@ async function sendPaymentEmail({ name, email }) {
     return;
   }
   const contestName = 'UCB Masters of Cocktail 2025';
-
+ const rulesUrl = "https://mailserver-y8jw.onrender.com/download/reglas";
   const res = await fetch(`${MAILER_URL}/api/mails/payment-confirmed`, {
     method: 'POST',
     headers: {
@@ -27,7 +27,7 @@ async function sendPaymentEmail({ name, email }) {
       // Debe coincidir con la validación que pusimos en server.js
       Authorization: `Bearer ${MAILER_API_KEY}`,
     },
-    body: JSON.stringify({ name, email, contestName }),
+    body: JSON.stringify({ name, email, contestName,rulesUrl }),
   });
 
   if (!res.ok) {
@@ -242,7 +242,7 @@ const togglePayment = async (userId) => {
       (user.paymentStatus === 'unpaid'
         ? 'Vimos que tu pago aún está pendiente. Puedes completarlo para asegurar tu cupo.\n\n'
         : '¡Gracias por tu pago! Tu inscripción está confirmada.\n\n') +
-      'Saludos,\nEquipo UCB'
+      'Saludos,\nEquipo UBC'
     );
     window.open(`mailto:${user.email}?subject=${subject}&body=${body}`, '_blank');
     showNotification(`Email preparado para ${user.name}`);
@@ -314,7 +314,7 @@ const togglePayment = async (userId) => {
             <h1 className="text-3xl font-bold bg-gradient-to-r from-amber-300 via-orange-400 to-amber-500 bg-clip-text text-transparent mb-2">
               Panel Administrativo
             </h1>
-            <p className="text-gray-400">Gestión de inscripciones - UCB Masters of Cocktail 2025</p>
+            <p className="text-gray-400">Gestión de inscripciones - UBC Masters of Cocktail 2025</p>
           </div>
           <button
             onClick={handleLogout}

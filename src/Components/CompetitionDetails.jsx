@@ -22,7 +22,7 @@ export default function CompetitionDetails() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            <h3 className="text-2xl font-bold mb-6 text-amber-300">UCB Masters of Cocktail</h3>
+            <h3 className="text-2xl font-bold mb-6 text-amber-300">UBC Masters of Cocktail</h3>
             <p className="text-base sm:text-lg text-gray-300 mb-6 leading-relaxed">
                 La competencia más emocionante de coctelería llega a Ambato. Bartenders de toda la región se reunirán para demostrar sus habilidades, creatividad y pasión por el arte de la mixología.
               </p>

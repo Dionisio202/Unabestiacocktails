@@ -77,7 +77,7 @@ export default function AdminLogin() {
           <h1 className="text-2xl font-bold bg-gradient-to-r from-amber-300 via-orange-400 to-amber-500 bg-clip-text text-transparent mb-2">
             Panel Administrativo
           </h1>
-          <p className="text-gray-400 text-sm">UCB Masters of Cocktail 2025</p>
+          <p className="text-gray-400 text-sm">UBC Masters of Cocktail 2025</p>
         </div>
 
         {/* Login Form */}

@@ -4,8 +4,34 @@ import { supabase } from '../lib/supabase';
 
 const CONTEST_SLUG = 'ucb-masters-2025';
 
+// ------- Config del mailer (Frontend → tu servidor Node) -------
+const MAILER_URL = import.meta.env.VITE_MAILER_URL;      // p.ej. https://mailserver.onrender.com
+const MAILER_API_KEY = import.meta.env.VITE_MAILER_API_KEY;
+
+// Llama al endpoint de tu servidor para enviar el correo de “inscripción recibida”
+async function sendRegistrationMail({ name, email }) {
+  if (!MAILER_URL || !MAILER_API_KEY) {
+    console.warn('MAILER_URL o MAILER_API_KEY no definidos');
+    return;
+  }
+  const contestName = 'UCB Masters of Cocktail Ambato 2025';
+
+  const res = await fetch(`${MAILER_URL}/api/mails/registration-received`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${MAILER_API_KEY}`,
+    },
+    body: JSON.stringify({ name, email, contestName }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || 'SEND_FAILED');
+  }
+}
+
 // ---------- Helpers de sanitización y validación ----------
-// Permitimos letras (con acentos), ñ, espacios, apóstrofe y guion.
 const NAME_ALLOWED = /[^A-Za-zÁÉÍÓÚÜÑáéíóúüñ'’ \-]/g; // todo lo que NO permitimos
 const collapseSpaces = (s) => s.replace(/\s+/g, ' ').trim();
 
@@ -13,47 +39,34 @@ const collapseSpaces = (s) => s.replace(/\s+/g, ' ').trim();
 function sanitizeNameOnChange(raw) {
   return raw.replace(NAME_ALLOWED, '');
 }
-
 function countSpaces(str) {
   return (str.match(/ /g) || []).length;
 }
-
 function sanitizePhone(raw) {
-  // Permitimos solo dígitos y un '+' al inicio
   let v = raw.replace(/[^\d+]/g, '');
   if (v.includes('+')) {
-    // mantener + solo si está al inicio
     v = (v.startsWith('+') ? '+' : '') + v.replace(/[+]/g, '').replace(/[^\d+]/g, '');
   }
   return v;
 }
-
 function isValidEmail(email) {
   const e = email.trim();
   if (/\s/.test(e)) return false;
   if (e.includes('..')) return false;
-  // regex razonable (no ultra-restrictiva)
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
 }
-
-// Teléfono Ecuador:
-// - 10 dígitos locales: ^\d{10}$ (ej: 09XXXXXXXX)
-// - Internacional: +593 seguido de 9 dígitos (se omite 0): ^\+593\d{9}$
+// Teléfono Ecuador: 10 dígitos locales o +593 + 9 dígitos
 function isValidEcPhone(phone) {
   const p = phone.trim();
   if (/^\d{10}$/.test(p)) return true;
   if (/^\+593\d{9}$/.test(p)) return true;
   return false;
 }
-
-// Normaliza el teléfono a un formato “bonito” para guardar (opcional)
 function normalizePhoneForSave(phone) {
   const p = phone.trim().replace(/\s+/g, '');
-  // Si vino en 10 dígitos que empiezan con 0, lo paso a +593 sin el 0
   if (/^\d{10}$/.test(p) && p.startsWith('0')) {
     return '+593' + p.slice(1);
   }
-  // Si ya es +593XXXXXXXXX, lo dejo igual
   return p;
 }
 
@@ -74,7 +87,7 @@ export default function RegistrationForm() {
         .eq('slug', CONTEST_SLUG)
         .eq('is_active', true)
         .maybeSingle();
-      console.log("sss"+data.id);
+
       if (error) {
         console.error(error);
         alert('No se pudo cargar el concurso. Intenta más tarde.');
@@ -91,18 +104,16 @@ export default function RegistrationForm() {
     const { name, value } = e.target;
     let v = value;
 
-    if (name === 'name') v = sanitizeNameOnChange(v); // << permite espacios al escribir
+    if (name === 'name') v = sanitizeNameOnChange(v);
     if (name === 'phone') v = sanitizePhone(v);
 
     setFormData((s) => ({ ...s, [name]: v }));
-
     if (errors[name]) setErrors((s) => ({ ...s, [name]: '' }));
   };
 
   const validateForm = () => {
     const newErrors = {};
 
-    // Validamos sobre lo que escribió el usuario (sin colapsar)
     const rawName = formData.name;
     if (!rawName.trim()) {
       newErrors.name = 'El nombre completo es requerido';
@@ -139,7 +150,6 @@ export default function RegistrationForm() {
       setErrors(newErrors);
       return;
     }
-
     if (!contestId) {
       alert('El concurso no está disponible en este momento.');
       return;
@@ -147,22 +157,13 @@ export default function RegistrationForm() {
 
     setIsSubmitting(true);
     try {
-      // Aquí sí normalizamos/colapsamos para guardar limpio
       const name = collapseSpaces(formData.name);
       const email = formData.email.trim().toLowerCase();
       const phone = normalizePhoneForSave(formData.phone);
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('registrations')
-        .insert([
-          {
-            contest_id: contestId,
-            name,
-            email,
-            phone,
-          },
-        ])
-    
+        .insert([{ contest_id: contestId, name, email, phone }]);
 
       if (error) {
         if (error.code === '23505') {
@@ -174,7 +175,21 @@ export default function RegistrationForm() {
         return;
       }
 
-      alert('¡Inscripción enviada exitosamente!');
+      // Intentar enviar el correo de “inscripción recibida”
+      try {
+        await sendRegistrationMail({ name, email });
+        alert(
+          '¡Inscripción enviada exitosamente! 🎉\n\n' +
+          'En breve nos pondremos en contacto por WhatsApp o email para coordinar el pago y asegurar tu cupo.'
+        );
+      } catch (mailErr) {
+        console.error('Fallo al enviar correo de bienvenida:', mailErr);
+        alert(
+          '¡Inscripción enviada exitosamente! 🎉\n\n' +
+          'No pudimos enviar el correo de bienvenida en este momento, pero nos pondremos en contacto por WhatsApp o email para coordinar el pago y asegurar tu cupo.'
+        );
+      }
+
       setFormData({ name: '', email: '', phone: '' });
       setErrors({});
     } finally {
@@ -227,7 +242,6 @@ export default function RegistrationForm() {
                 autoComplete="name"
                 inputMode="text"
                 maxLength={80}
-           
               />
 
               <Input
@@ -255,7 +269,7 @@ export default function RegistrationForm() {
                 disabled={isSubmitting || loadingContest}
                 autoComplete="tel"
                 inputMode="tel"
-                maxLength={13} // +5939XXXXXXXX = 13
+                maxLength={13}
                 pattern="(\+593\d{9}|\d{10})"
               />
             </div>
@@ -292,7 +306,7 @@ export default function RegistrationForm() {
                     'noopener,noreferrer'
                   )
                 }
-                className="text-amber-400 hover:text-amber-300 underline transition-colors duración-200"
+                className="text-amber-400 hover:text-amber-300 underline transition-colors duration-200"
               >
                 Contáctanos
               </button>
