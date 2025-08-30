@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import calaca from "../assets/calaca.jpeg";
 import casa_ambatena from "../assets/casa_ambatena.png";
 import move2 from '../assets/page/move2.png';
-
+import hogera from "../assets/hogera.jpeg";   // La Hoguera Asadero
+import integra from "../assets/integra.PNG";  // cuidado: extensión en MAYÚSCULAS
+import agraz from "../assets/agraz.jpeg";     // AGRAZ London Dry Gin
 export default function SponsorsSection() {
   const [isVisible, setIsVisible] = useState({});
 
@@ -11,17 +13,9 @@ export default function SponsorsSection() {
     // Principales
     { id: 1, name: "Hotel Casa Ambateña", tier: "main", website: "#", logo: casa_ambatena },
     { id: 2, name: "Tequila Calaca",  tier: "main", website: "#", logo: calaca },
-
-    // Oro
-    //{ id: 3, name: "Bar Equipment Pro", tier: "gold", website: "#", logo: "https://via.placeholder.com/180x90/374151/fbbf24?text=Bar+Equipment" },
-    //{ id: 4, name: "Fresh Ingredients", tier: "gold", website: "#", logo: "https://via.placeholder.com/180x90/374151/fbbf24?text=Fresh+Ingredients" },
-    //{ id: 5, name: "Glassware Elite",   tier: "gold", website: "#", logo: "https://via.placeholder.com/180x90/374151/fbbf24?text=Glassware+Elite" },
-
-    // Colaboradores
-   // { id: 6, name: "Local Venue",    tier: "silver", website: "#", logo: "https://via.placeholder.com/160x80/4b5563/e5e7eb?text=Local+Venue" },
-    //{ id: 7, name: "Event Supplies", tier: "silver", website: "#", logo: "https://via.placeholder.com/160x80/4b5563/e5e7eb?text=Event+Supplies" },
-    //{ id: 8, name: "Media Partner",  tier: "silver", website: "#", logo: "https://via.placeholder.com/160x80/4b5563/e5e7eb?text=Media+Partner" },
-    //{ id: 9, name: "Support Co.",    tier: "silver", website: "#", logo: "https://via.placeholder.com/160x80/4b5563/e5e7eb?text=Support+Co" }
+    { id: 3, name: "La Hoguera Asadero",  tier: "gold",   website: "#", logo: hogera },
+    { id: 4, name: "INTEGRA FILMS",       tier: "silver", website: "#", logo: integra },
+    { id: 5, name: "AGRAZ London Dry Gin",tier: "silver", website: "#", logo: agraz },
   ];
 
   // Orden para que los más importantes aparezcan primero (sin separarlos)
