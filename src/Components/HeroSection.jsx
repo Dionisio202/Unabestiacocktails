@@ -1,53 +1,40 @@
 import { Calendar, MapPin, Trophy, ChevronDown } from 'lucide-react';
 import logo_comp from '../assets/page/logo_comp.png';
+import background_image from '../assets/page/bg-hero.png'; // Ajusta la ruta según tu estructura
+
 export default function HeroSection() {
   return (
     <section
       id="home"
-      className="min-h-[calc(100vh-88px)] flex items-center justify-center pt-20 pb-16 relative overflow-hidden"
+className="min-h-[100vh] flex items-center justify-center pt-20 pb-16 relative overflow-hidden"
+      style={{
+        backgroundImage: `url(${background_image})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
     >
+      {/* Overlay oscuro para mejorar legibilidad */}
+      <div className="absolute inset-0 bg-black/50" />
+      
+      {/* Gradiente adicional para el efecto amber/orange */}
       <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-orange-500/10" />
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6 text-center relative z-10">
          <img
           src={logo_comp}
           alt="UCB Masters of Cocktail - Logo"
-          className="mx-auto mb-6 h-42 sm:h-20 md:h-64 w-auto drop-shadow-[0_6px_18px_rgba(251,191,36,0.25)]"
+className="mx-auto mb-6 h-82 sm:h-64 md:h-80 lg:h-[28rem] w-auto"
           loading="eager"
           draggable="false"
         />
        
+       
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-12 max-w-4xl mx-auto">
-          <Card icon={<Calendar />} title="9 de Noviembre" text="2025" />
-
-          <Card
-            icon={<MapPin />}
-            title="Hotel Casa Ambateña"
-            text="Miraflores, Ambato"
-            isLocation
-            mapEmbedUrl={
-              "https://www.google.com/maps?q=Hotel+Casa+Ambate%C3%B1a,+Miraflores,+Ambato&output=embed"
-            }
-            mapsLink={
-              "https://www.google.com/maps/search/?api=1&query=Hotel+Casa+Ambate%C3%B1a,+Miraflores,+Ambato"
-            }
-          />
-
-          <Card icon={<Trophy />} title="Premios" text="Reconocimiento y premios" />
-        </div>
-
-        <a
-          href="#register"
-          className="inline-block bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold py-3 px-6 sm:py-4 sm:px-8 rounded-full text-base sm:text-lg shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105"
-        >
-          Inscríbete Ahora
-        </a>
+      
       </div>
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce hidden sm:block">
-        <ChevronDown className="w-6 h-6 sm:w-8 sm:h-8 text-amber-400" />
-      </div>
+    
     </section>
   );
 }
@@ -55,11 +42,8 @@ export default function HeroSection() {
 function Card({ icon, title, text, isLocation = false, mapEmbedUrl, mapsLink }) {
   return (
     <div className="group relative">
-      {/* Glow exterior en hover */}
-   
-
       {/* Card */}
-      <div className="relative bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-amber-500/20 text-left
+      <div className="relative bg-black/60 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-amber-500/20 text-left
                       transition-all duration-300
                       group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-amber-500/20 group-hover:border-amber-400/60">
 
@@ -71,13 +55,11 @@ function Card({ icon, title, text, isLocation = false, mapEmbedUrl, mapsLink }) 
           aria-hidden
         />
 
-       
-
         {/* Contenido */}
         <div className="relative">
-          <div className="w-8 h-8 text-amber-400 mx-auto mb-4">{icon}</div>
-          <h3 className="text-lg sm:text-xl font-semibold mb-2 text-center">{title}</h3>
-          <p className="text-gray-300 text-center mb-4">{text}</p>
+          <div className="w-8 h-8 text-amber-400 mx-auto mb-4 flex justify-center items-center">{icon}</div>
+          <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-2 text-center text-white">{title}</h3>
+          <p className="text-gray-300 text-sm sm:text-base text-center mb-4">{text}</p>
 
           {isLocation && (
             <div className="mt-2 space-y-3">
