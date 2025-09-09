@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import move3 from '../assets/page/move3.png';
+import backgroundImage from '../assets/page/background.png'; // Ajusta la ruta según tu estructura
 import { supabase } from '../lib/supabase';
 
 const CONTEST_SLUG = 'ucb-masters-2025';
@@ -8,7 +9,7 @@ const CONTEST_SLUG = 'ucb-masters-2025';
 const MAILER_URL = import.meta.env.VITE_MAILER_URL;      // p.ej. https://mailserver.onrender.com
 const MAILER_API_KEY = import.meta.env.VITE_MAILER_API_KEY;
 
-// Llama al endpoint de tu servidor para enviar el correo de “inscripción recibida”
+// Llama al endpoint de tu servidor para enviar el correo de "inscripción recibida"
 async function sendRegistrationMail({ name, email }) {
   if (!MAILER_URL || !MAILER_API_KEY) {
     console.warn('MAILER_URL o MAILER_API_KEY no definidos');
@@ -32,7 +33,7 @@ async function sendRegistrationMail({ name, email }) {
 }
 
 // ---------- Helpers de sanitización y validación ----------
-const NAME_ALLOWED = /[^A-Za-zÁÉÍÓÚÜÑáéíóúüñ'’ \-]/g; // todo lo que NO permitimos
+const NAME_ALLOWED = /[^A-Za-zÁÉÍÓÚÜÑáéíóúüñ'' \-]/g; // todo lo que NO permitimos
 const collapseSpaces = (s) => s.replace(/\s+/g, ' ').trim();
 
 // Durante la escritura: NO trim, NO collapse; solo filtra caracteres no permitidos
@@ -175,7 +176,7 @@ export default function RegistrationForm() {
         return;
       }
 
-      // Intentar enviar el correo de “inscripción recibida”
+      // Intentar enviar el correo de "inscripción recibida"
       try {
         await sendRegistrationMail({ name, email });
         alert(
@@ -198,8 +199,17 @@ export default function RegistrationForm() {
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black flex items-center justify-center px-4 py-8">
-      <div className="max-w-6xl w-full">
+    <section className="relative min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black flex items-center justify-center px-4 py-8">
+      {/* Imagen de fondo transparentada - Opción 1: Imagen fija */}
+      <div 
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+        }}
+      ></div>
+
+      {/* Contenido principal - ahora con z-index para estar encima */}
+      <div className="relative z-10 max-w-6xl w-full">
         <div className="text-center mb-8">
           <h1 id="register" className="text-5xl font-bold mb-4 bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 bg-clip-text text-transparent">
             Inscríbete Ahora
