@@ -13,7 +13,7 @@ export default function SponsorsSection() {
       { id: 5, name: "AGRAZ London Dry Gin", logo: agraz,  fit: "contain" }, // fondo blanco, mejor contain
       { id: 1, name: "Hotel Casa Ambateña",  logo: casa_ambatena, fit: "cover" }, // cuadro rojo, full bleed
       { id: 2, name: "Tequila Calaca",       logo: calaca, fit: "cover" },   // si quieres que llene, usa cover
-      { id: 3, name: "La Hoguera Asadero",   logo: hogera, fit: "contain" }, // o cambia a "cover" si prefieres
+      { id: 3, name: "La Hoguera Asadero",   logo: hogera, fit: "cover" }, // o cambia a "cover" si prefieres
       { id: 4, name: "INTEGRA FILMS",        logo: integra, fit: "cover" },
     ],
     []
@@ -299,7 +299,7 @@ function SlotMedium({ sponsor }) {
 /* ───────────────────────────────────────────── */
 function CardShell({ children, className = "", borderTone = "border-gray-300/30", style }) {
   return (
-    <div className={`bg-white ${borderTone} ${className}`} style={style}>
+    <div className={`bg-white ${borderTone} ${className} `} style={style}>
       {children}
     </div>
   );
