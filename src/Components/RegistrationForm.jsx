@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import move3 from '../assets/page/move3.png';
 import { supabase } from '../lib/supabase';
 
-const CONTEST_SLUG = 'ucb-masters-2025';
+const CONTEST_SLUG = 'ucb-masters-001-2026';
 
 // ------- Config del mailer (Frontend → tu servidor Node) -------
 const MAILER_URL = import.meta.env.VITE_MAILER_URL;      // p.ej. https://mailserver.onrender.com
@@ -14,7 +14,7 @@ async function sendRegistrationMail({ name, email }) {
     console.warn('MAILER_URL o MAILER_API_KEY no definidos');
     return;
   }
-  const contestName = 'UCB Masters of Cocktail Ambato 2025';
+  const contestName = 'ucb-masters-001-2026';
 
   const res = await fetch(`${MAILER_URL}/api/mails/registration-received`, {
     method: 'POST',
@@ -71,7 +71,13 @@ function normalizePhoneForSave(phone) {
 }
 
 export default function RegistrationForm() {
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
+  const [formData, setFormData] = useState({
+  name: '',
+  email: '',
+  phone: '',
+  city: '',
+});
+
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -113,6 +119,12 @@ export default function RegistrationForm() {
 
   const validateForm = () => {
     const newErrors = {};
+const city = formData.city.trim();
+if (!city) {
+  newErrors.city = 'La ciudad es requerida';
+} else if (city.length < 2) {
+  newErrors.city = 'Ingresa una ciudad válida';
+}
 
     const rawName = formData.name;
     if (!rawName.trim()) {
@@ -160,10 +172,15 @@ export default function RegistrationForm() {
       const name = collapseSpaces(formData.name);
       const email = formData.email.trim().toLowerCase();
       const phone = normalizePhoneForSave(formData.phone);
+const city = collapseSpaces(formData.city);
 
-      const { error } = await supabase
-        .from('registrations')
-        .insert([{ contest_id: contestId, name, email, phone }]);
+
+
+     const { error } = await supabase
+  .from('registrations')
+  .insert([
+    { contest_id: contestId, name, email, phone, city }
+  ]);
 
       if (error) {
         if (error.code === '23505') {
@@ -190,7 +207,7 @@ export default function RegistrationForm() {
         );
       }
 
-      setFormData({ name: '', email: '', phone: '' });
+      setFormData({ name: '', email: '', phone: '', city: '' });
       setErrors({});
     } finally {
       setIsSubmitting(false);
@@ -273,6 +290,18 @@ export default function RegistrationForm() {
                 pattern="(\+593\d{9}|\d{10})"
               />
             </div>
+<Input
+  label="Ciudad *"
+  name="city"
+  type="text"
+  value={formData.city}
+  onChange={handleInputChange}
+  error={errors.city}
+  placeholder="Ej. Ambato"
+  disabled={isSubmitting || loadingContest}
+  autoComplete="address-level2"
+  maxLength={60}
+/>
 
             <button
               onClick={handleSubmit}

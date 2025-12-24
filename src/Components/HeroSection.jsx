@@ -1,6 +1,6 @@
 import { Calendar, MapPin, Trophy, ChevronDown } from 'lucide-react';
 import logo_comp from '../assets/page/logo_comp.png';
-import background_image from '../assets/page/bg-hero.png'; // Ajusta la ruta según tu estructura
+import background_image from '../assets/page/bg-herox3.jpeg'; // Ajusta la ruta según tu estructura
 
 export default function HeroSection() {
   return (
@@ -21,7 +21,7 @@ className="min-h-[100vh] flex items-center justify-center pt-20 pb-16 relative o
       <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-orange-500/10" />
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6 text-center relative z-10">
-         <img
+        {/*  <img
           src={logo_comp}
           alt="UCB Masters of Cocktail - Logo"
 className="mx-auto mb-6 h-82 sm:h-64 md:h-80 lg:h-[28rem] w-auto"
@@ -29,7 +29,7 @@ className="mx-auto mb-6 h-82 sm:h-64 md:h-80 lg:h-[28rem] w-auto"
           draggable="false"
         />
        
-       
+       */}
 
       
       </div>

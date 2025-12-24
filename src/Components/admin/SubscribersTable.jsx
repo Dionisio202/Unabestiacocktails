@@ -54,6 +54,7 @@ export default function SubscribersTable({
               <th className="text-left p-4 text-gray-300 font-semibold">Nombre</th>
               <th className="text-left p-4 text-gray-300 font-semibold">Email</th>
               <th className="text-left p-4 text-gray-300 font-semibold">Teléfono</th>
+              <th className="text-left p-4 text-gray-300 font-semibold">Ciudad</th>
               <th className="text-left p-4 text-gray-300 font-semibold">Fecha Registro</th>
               <th className="text-left p-4 text-gray-300 font-semibold">Estado de pago</th>
               <th className="text-left p-4 text-gray-300 font-semibold">Fecha de pago</th>
@@ -67,6 +68,8 @@ export default function SubscribersTable({
                   <td className="p-4 text-white font-medium">{u.name}</td>
                   <td className="p-4 text-gray-300">{u.email}</td>
                   <td className="p-4 text-gray-300">{u.phone}</td>
+                  <td className="p-4 text-gray-300">{u.city || '-'}</td>
+
                   <td className="p-4 text-gray-300">{formatDate(u.registrationDate)}</td>
                   <td className="p-4">
                     <span
@@ -123,7 +126,7 @@ export default function SubscribersTable({
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="p-8 text-center text-gray-400">No se encontraron resultados</td>
+                <td colSpan="8" className="p-8 text-center text-gray-400">No se encontraron resultados</td>
               </tr>
             )}
           </tbody>

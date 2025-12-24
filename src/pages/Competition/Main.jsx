@@ -18,7 +18,7 @@ async function sendPaymentEmail({ name, email }) {
     console.warn('MAILER_URL o MAILER_API_KEY no definidos');
     return;
   }
-  const contestName = 'UCB Masters of Cocktail 2025';
+  const contestName = 'ucb-masters-001-2026';
  const rulesUrl = "https://mailserver-y8jw.onrender.com/download/reglas";
   const res = await fetch(`${MAILER_URL}/api/mails/payment-confirmed`, {
     method: 'POST',
@@ -37,7 +37,7 @@ async function sendPaymentEmail({ name, email }) {
 }
 
 // Cambia al slug del concurso activo en tu DB
-const CONTEST_SLUG = 'ucb-masters-2025';
+const CONTEST_SLUG = 'ucb-masters-001-2026';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -100,7 +100,7 @@ const [loadingMail, setLoadingMail] = useState(false);
       setLoadingTable(true);
       const { data, error } = await supabase
         .from('registrations')
-        .select('id,name,email,phone,registered_at,payment_status,payment_date')
+        .select('id,name,email,phone,city,registered_at,payment_status,payment_date')
         .eq('contest_id', contestId)
         .order('registered_at', { ascending: false });
 
@@ -115,6 +115,7 @@ const [loadingMail, setLoadingMail] = useState(false);
             name: r.name,
             email: r.email,
             phone: r.phone ?? '',
+             city: r.city ?? '',
             registrationDate: r.registered_at,
             paymentStatus: r.payment_status,
             paymentDate: r.payment_date,
@@ -145,7 +146,8 @@ const togglePayment = async (userId) => {
     .from('registrations')
     .update(patch)
     .eq('id', userId)
-    .select('id,name,email,payment_status,payment_date')
+    .select('id,name,email,phone,city,registered_at,payment_status,payment_date')
+
     .maybeSingle();
 
   if (error) {
@@ -203,28 +205,32 @@ const togglePayment = async (userId) => {
 
   const handleEdit = (user) => setEditingUser({ ...user });
 
-  const saveEdit = async () => {
-  const { id, name, phone } = editingUser;
+const saveEdit = async () => {
+  const { id, name, phone, city } = editingUser;
+
   const old = subscribers.find(u => u.id === id);
   if (!old) return;
 
   const ok = window.confirm(
     `¿Guardar cambios de "${old.name}"?\n\n` +
     `Nombre: ${old.name} → ${name}\n` +
-    `Teléfono: ${old.phone || '-'} → ${phone || '-'}`
+    `Teléfono: ${old.phone || '-'} → ${phone || '-'}\n` +
+    `Ciudad: ${old.city || '-'} → ${city || '-'}\n`
   );
   if (!ok) return;
 
   // Optimista
-  setSubscribers(prev => prev.map(u => u.id === id ? { ...u, name, phone } : u));
+  setSubscribers(prev =>
+    prev.map(u => (u.id === id ? { ...u, name, phone, city } : u))
+  );
 
   const { error } = await supabase
     .from('registrations')
-    .update({ name, phone })
+    .update({ name, phone, city })
     .eq('id', id);
 
   if (error) {
-    setSubscribers(prev => prev.map(u => u.id === id ? old : u)); // Revertir
+    setSubscribers(prev => prev.map(u => (u.id === id ? old : u))); // revertir
     console.error(error);
     showNotification('No se pudo actualizar', 'error');
     return;
@@ -233,6 +239,7 @@ const togglePayment = async (userId) => {
   setEditingUser(null);
   showNotification('Participante actualizado');
 };
+
 
 
   const sendEmail = (user) => {
@@ -268,37 +275,50 @@ const togglePayment = async (userId) => {
   const paidCount = subscribers.filter((u) => u.paymentStatus === 'paid').length;
   const unpaidCount = subscribers.filter((u) => u.paymentStatus === 'unpaid').length;
 
-  const exportData = () => {
-    const csvContent = [
-      ['Nombre', 'Email', 'Teléfono', 'Fecha de Registro', 'Estado de Pago', 'Fecha de Pago'],
-      ...filteredData.map((u) => [
-        u.name,
-        u.email,
-        u.phone,
-        formatDate(u.registrationDate),
-        u.paymentStatus === 'paid' ? 'Pagado' : 'No pagado',
-        u.paymentDate ? formatDate(u.paymentDate) : '',
-      ]),
-    ]
-      .map((row) =>
-        row.map((cell) => {
-          const c = String(cell ?? '');
-          return /[",\n]/.test(c) ? `"${c.replace(/"/g, '""')}"` : c;
-        }).join(',')
-      )
-      .join('\n');
+ const exportData = () => {
+  // ✅ BOM para que Excel detecte UTF-8 (tildes/ñ bien)
+  const BOM = '\uFEFF';
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'inscripciones.csv';
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    showNotification('Datos exportados');
-  };
+  const csvContent = [
+    ['Nombre', 'Email', 'Telefono', 'Ciudad', 'Fecha de Registro', 'Estado de Pago', 'Fecha de Pago'],
+    ...filteredData.map((u) => [
+      u.name ?? '',
+      u.email ?? '',
+      u.phone ?? '',
+      u.city ?? '',
+      formatDate(u.registrationDate),
+      u.paymentStatus === 'paid' ? 'Pagado' : 'No pagado',
+      u.paymentDate ? formatDate(u.paymentDate) : '',
+    ]),
+  ]
+    .map((row) =>
+      row
+        .map((cell) => {
+          const c = String(cell ?? '');
+          // Escapar comillas, saltos y comas
+          return /[",\n]/.test(c) ? `"${c.replace(/"/g, '""')}"` : c;
+        })
+        .join(',')
+    )
+    .join('\n');
+
+  const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'inscripciones.csv';
+  a.style.display = 'none';
+
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  URL.revokeObjectURL(url); // ✅ limpia memoria
+
+  showNotification('Datos exportados');
+};
+
 
   const handleSearch = (v) => { setSearchTerm(v); setCurrentPage(1); };
   const handleFilter = (v) => { setPaymentFilter(v); setCurrentPage(1); };
@@ -314,7 +334,7 @@ const togglePayment = async (userId) => {
             <h1 className="text-3xl font-bold bg-gradient-to-r from-amber-300 via-orange-400 to-amber-500 bg-clip-text text-transparent mb-2">
               Panel Administrativo
             </h1>
-            <p className="text-gray-400">Gestión de inscripciones - UBC Masters of Cocktail 2025</p>
+            <p className="text-gray-400">Gestión de inscripciones - UBC Masters of Cocktail 2026 </p>
           </div>
           <button
             onClick={handleLogout}

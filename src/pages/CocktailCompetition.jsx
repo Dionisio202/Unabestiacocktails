@@ -10,7 +10,7 @@ export default function CocktailCompetition() {
       <Header />
       <HeroSection />
       <CompetitionDetails />
-      <SponsorsSection />
+      {/* <SponsorsSection /> */}
       <RegistrationForm />
       <Footer />
     </div>
