@@ -63,7 +63,7 @@ export default function Footer() {
                 className="flex items-center gap-3 text-gray-300 hover:text-amber-400 transition-colors group"
               >
                 <Mail className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                <span>info@unabestiacocktails.com</span>
+                <span>unabestiacocktails@gmail.com</span>
               </a>
               <a 
                 href="tel:+593999817566" 

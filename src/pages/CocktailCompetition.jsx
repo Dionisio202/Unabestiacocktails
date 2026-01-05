@@ -4,13 +4,15 @@ import CompetitionDetails from "../Components/CompetitionDetails";
 import RegistrationForm from "../Components/RegistrationForm";
 import Footer from "../Components/Footer";
 import SponsorsSection from "../Components/SponsorsSection";
+import SponsorshipCategories from "../Components/SponsorshipCategories";
 export default function CocktailCompetition() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
       <Header />
       <HeroSection />
       <CompetitionDetails />
-      {/* <SponsorsSection /> */}
+      <SponsorsSection /> 
+      <SponsorshipCategories />
       <RegistrationForm />
       <Footer />
     </div>
