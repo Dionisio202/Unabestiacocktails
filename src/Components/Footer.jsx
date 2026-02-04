@@ -106,11 +106,24 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="border-t border-amber-500/20 mt-12 pt-8 text-center">
-          <p className="text-gray-400 text-sm">
-            &copy; 2025 Grupo Una Bestia Cocktails. Todos los derechos reservados.
-          </p>
-        </div>
+      <div className="border-t border-amber-500/20 mt-12 pt-8 text-center">
+  <p className="text-gray-400 text-sm">
+    &copy; 2025 Grupo Una Bestia Cocktails. Todos los derechos reservados.
+  </p>
+
+  <p className="mt-2 text-[11px] text-gray-500">
+    Powered by{" "}
+    <a
+      href="https://edison-portafolio.vercel.app/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-gray-400 hover:text-amber-400 transition-colors"
+    >
+      Edison
+    </a>
+  </p>
+</div>
+
       </div>
     </footer>
   );

@@ -2,7 +2,7 @@ import logo_comp from '../assets/page/bg-hero4.png';
 import background_image from '../assets/page/bg-herox3.jpeg';
 
 export default function HeroSection() {
- const mapsUrl = "https://www.google.com/maps?q=-1.3952057,-78.4245868&z=16";
+ const mapsUrl = "https://www.google.com/maps/dir/?api=1&destination=-1.3984883,-78.4388232";
 
 
   return (
